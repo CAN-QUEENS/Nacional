@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,14 +11,17 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Disabled
-@TeleOp(name = "CAMERA STREAM")
-public class  CameraStream extends LinearOpMode {
+@TeleOp(name = "CAMERA STREAM Dashboard")
+public class CameraStream extends LinearOpMode {
     OpenCvCamera camera;
+    FtcDashboard dashboard;
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        dashboard = FtcDashboard.getInstance();
 
         // No pipeline for processing, just stream
         camera.setPipeline(new NoOpPipeline());
@@ -25,8 +29,8 @@ public class  CameraStream extends LinearOpMode {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                // Start streaming with a more common resolution (640x480) and MJPEG format
                 camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                dashboard.startCameraStream(camera, 0); // Start streaming to the dashboard
             }
 
             @Override
@@ -36,16 +40,16 @@ public class  CameraStream extends LinearOpMode {
             }
         });
 
-        telemetry.setMsTransmissionInterval(50);
-
-        // Wait until the start button is pressed
         waitForStart();
 
-        // Once started, keep the op mode active and continue streaming
+        // Keep the op mode running to maintain the stream
         while (opModeIsActive()) {
+            telemetry.addData("Streaming", "Active");
             telemetry.update();
-            sleep(20);
+            // No sleep here to ensure continuous streaming
         }
+
+        dashboard.stopCameraStream(); // Stop streaming when the op mode is stopped
     }
 
     // Simple pipeline that does nothing
