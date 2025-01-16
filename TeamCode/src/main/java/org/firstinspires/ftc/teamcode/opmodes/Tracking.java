@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -53,6 +51,7 @@ public class Tracking extends LinearOpMode {
     public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
     public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
 
+    private String selectedColor = "yellow";
 
     @Override
     public void runOpMode() {
@@ -69,10 +68,19 @@ public class Tracking extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
 
-
         waitForStart();
 
         while (opModeIsActive()) {
+
+            if (gamepad1.a) {
+                selectedColor = "yellow";
+            } else if (gamepad1.b) {
+                selectedColor = "red";
+            } else if (gamepad1.x) {
+                selectedColor = "blue";
+            }
+
+            telemetry.addData("Selected Color", selectedColor);
             telemetry.addData("Target IMU Angle", getAngleTarget(cX));
             telemetry.addData("Current IMU Angle", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             double power = PIDControl(Math.toRadians(0 + getAngleTarget(cX)), imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
@@ -82,16 +90,12 @@ public class Tracking extends LinearOpMode {
             telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
             telemetry.addData("Distance in Inch", (getDistance(width)));
             telemetry.update();
-
-            // The OpenCV pipeline automatically processes frames and handles detection
         }
-
         // Release resources
         controlHubCam.stopStreaming();
     }
 
     private void initOpenCV() {
-
         // Create an instance of the camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -142,7 +146,6 @@ public class Tracking extends LinearOpMode {
                 Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
 
             }
-
             return input;
         }
 
@@ -153,15 +156,34 @@ public class Tracking extends LinearOpMode {
             Scalar lowerYellow = new Scalar(100, 100, 100);
             Scalar upperYellow = new Scalar(180, 255, 255);
 
+            Scalar lowerRed = new Scalar(0, 100, 100);
+            Scalar upperRed = new Scalar(10, 255, 255);
 
-            Mat yellowMask = new Mat();
-            Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
+            Scalar lowerBlue = new Scalar(100, 150, 0);
+            Scalar upperBlue = new Scalar(140, 255, 255);
+
+            Mat colorMask = new Mat();
+
+            switch (selectedColor) {
+                case "yellow":
+                    Core.inRange(hsvFrame, lowerYellow, upperYellow, colorMask);
+                    break;
+                case "red":
+                    Core.inRange(hsvFrame, lowerRed, upperRed, colorMask);
+                    break;
+                case "blue":
+                    Core.inRange(hsvFrame, lowerBlue, upperBlue, colorMask);
+                    break;
+                default:
+                    colorMask.setTo(new Scalar(0));
+                    break;
+            }
 
             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
-            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
+            Imgproc.morphologyEx(colorMask, colorMask, Imgproc.MORPH_OPEN, kernel);
+            Imgproc.morphologyEx(colorMask, colorMask, Imgproc.MORPH_CLOSE, kernel);
 
-            return yellowMask;
+            return colorMask;
         }
 
         private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
@@ -211,6 +233,4 @@ public class Tracking extends LinearOpMode {
         }
         return radians;
     }
-
-
 }
