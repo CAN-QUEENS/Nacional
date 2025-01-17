@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.ColorDetector;
@@ -24,9 +25,11 @@ public class Detection extends LinearOpMode {
         ColorDetector pipeline = new ColorDetector();
         camera.setPipeline(pipeline);
 
+        // Asíncrona para abrir la cámara
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
+                // Configura la cámara para comenzar a transmitir a 640x480 y en orientación vertical
                 camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
 
@@ -37,9 +40,13 @@ public class Detection extends LinearOpMode {
             }
         });
 
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        FtcDashboard.getInstance().startCameraStream(camera, 30);
+
         waitForStart();
 
         while (opModeIsActive()) {
+            // Selección del color
             if (gamepad1.a) {
                 selectedColor = "RED";
             } else if (gamepad1.b) {

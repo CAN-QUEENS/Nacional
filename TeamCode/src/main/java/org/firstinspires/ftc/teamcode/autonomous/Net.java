@@ -17,11 +17,10 @@ import org.opencv.core.Mat;
 public final class Net extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startPose = new Pose2d(24, -62, Math.PI);
+        Pose2d startPose = new Pose2d(-16, -62, Math.PI/2);
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(24, -52))
                 .setTangent(Math.PI / 2)
                 .splineToConstantHeading(new Vector2d(-36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(-37, -10))

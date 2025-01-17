@@ -15,7 +15,7 @@ public class Colect_Human {
                 .setConstraints(80, 80, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(23, -62, Math.PI ))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(23, -62, Math.PI/2 ))
                 .setTangent(Math.PI / 2)
                 .splineToConstantHeading(new Vector2d(36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(37, -10))
