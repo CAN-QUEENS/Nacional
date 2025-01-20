@@ -41,7 +41,7 @@ public class Detection extends LinearOpMode {
         });
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
-        FtcDashboard.getInstance().startCameraStream(camera, 30);
+        FtcDashboard.getInstance().startCameraStream(camera, 60);
 
         waitForStart();
 

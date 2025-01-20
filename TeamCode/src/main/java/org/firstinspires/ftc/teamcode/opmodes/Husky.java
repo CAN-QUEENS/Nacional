@@ -65,7 +65,7 @@ public class Husky extends LinearOpMode {
         }
 
         //TODO: ****** CHANGE: TAG_RECOGNITION ******
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.OBJECT_TRACKING);
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
 
         telemetry.update();
         waitForStart();

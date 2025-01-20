@@ -83,7 +83,7 @@ public class ColorDetector extends OpenCvPipeline {
         }
 
         // Dibujar contornos (opcional)
-        Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0), 2);
+        Imgproc.drawContours(input, contours, -1, new Scalar(184, 51, 255), 2);
 
         hsvImage.release();
         mask.release();

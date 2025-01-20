@@ -30,7 +30,7 @@ public class Colect_Net{
                 .strafeTo(new Vector2d(-61, -10))
                 .strafeTo(new Vector2d(-61, -53))
                 .setTangent(Math.PI /3)
-                .splineToLinearHeading(new Pose2d(-36, -10, Math.PI * -1.5), Math.PI/2)
+                .splineToLinearHeading(new Pose2d(-39, -10, Math.PI * 2), Math.PI/2)
                 .strafeTo(new Vector2d(-24, -10))
                 .build());
 
