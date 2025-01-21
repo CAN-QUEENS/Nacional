@@ -12,10 +12,10 @@ public class Samples{
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(90, 90, Math.toRadians(180), Math.toRadians(180), 18)
+                .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 18)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(23, -61, -Math.PI/2))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(23, -62, Math.PI/2))
                 //TODO: FIRST ESPECIMEN
                 .strafeTo(new Vector2d(0,-37))
                 .waitSeconds(1)
@@ -35,30 +35,27 @@ public class Samples{
                 .strafeTo(new Vector2d(61, -59))
                 .waitSeconds(.6)
                 //TODO: SECOND ESPECIMEN
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(270))
+                .strafeTo(new Vector2d(0, -37))
                 .strafeTo(new Vector2d(0,-37))
                 .waitSeconds(1)
                 //TODO: OBSERVATION ZONE
-                .strafeToLinearHeading(new Vector2d(40, -59), Math.toRadians(-270))
+                .strafeTo(new Vector2d(40, -59))
                 .waitSeconds(1)
                 //TODO: THIRD ESPECIMEN
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(270))
+                .strafeTo(new Vector2d(0, -37))
                 .strafeTo(new Vector2d(0,-37))
                 .waitSeconds(1)
                 //TODO: OBSERVATION ZONE
-                .strafeToLinearHeading(new Vector2d(40, -59), Math.toRadians(-270))
+                .strafeTo(new Vector2d(40, -59))
                 .waitSeconds(1)
                 //TODO: FOURTH ESPECIMEN
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(270))
+                .strafeTo(new Vector2d(0, -37))
                 .strafeTo(new Vector2d(0,-37))
                 .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(36, -55), Math.toRadians(-270))
-                /*
+                .strafeTo(new Vector2d(36, -55))
                 .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(270))
+                .strafeTo(new Vector2d(0, -37))
                 .strafeTo(new Vector2d(0,-37))
-                .waitSeconds(1)
-                 */
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.utils.Constants.Intake.INTAKE_NAME;
 import static org.firstinspires.ftc.teamcode.utils.Constants.Intake.*;
 
 import androidx.annotation.NonNull;
@@ -11,53 +10,61 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    private final Servo servo;
-
-    public Intake(HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, INTAKE_NAME);
+    public Servo intakeSERVO;
+    public void init(HardwareMap hardwareMap) {
+        intakeSERVO = hardwareMap.get(Servo.class, INTAKE_NAME);
     }
-
-    public void setPower(double power) {
-        servo.setPosition(power);
-    }
-
-    public void stop() {
-        servo.setPosition(0.5);
-    }
-
-    public class OUT implements Action {
+    public class OUTSAMPLE implements Action {
+        Servo intakeSERVO;
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            try {
-                setPower(OUT_POSITION);
-                Thread.sleep(1000);
-                stop();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return true;
+            intakeSERVO.setPosition(POS_OPEN);
+            return false;
         }
     }
 
-    public Action OUT() {
-        return new OUT();
-    }
+    public class INSAMPLE implements Action {
+        Servo claw;
 
-    public class IN implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            try {
-                setPower(IN_POSITION);
-                Thread.sleep(1000);
-                stop();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return true;
+            claw.setPosition(POS_CLOSE);
+            return false;
         }
     }
 
-    public Action IN() {
-        return new IN();
+    public Action dropSample(){
+        return new OUTSAMPLE();
     }
+
+    public Action pickSample(){
+        return new INSAMPLE();
+    }
+
+
+
+   /* class SamplePickColor implements Action {
+
+        int Color;
+        double Time;
+        ElapsedTime timer;
+
+        public SamplePickColor(int color, double time) {
+            this.Color = color;
+            this.Time = time;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (timer == null) {
+                timer = new ElapsedTime();
+                etesito.pickSample();
+                rodeMotor.setPower(0.05);
+
+            }
+
+            return (Color < 350 || etesito.getColorGreen() < 600) || timer.seconds() < Time;
+        }
+
+    }*/
 }
