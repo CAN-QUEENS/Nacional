@@ -38,16 +38,16 @@ public final class Sampless extends LinearOpMode {
                 .waitSeconds(1)
                 .setTangent(0)
                 .strafeToLinearHeading(new Vector2d(36, -37), Math.toRadians(-270), translationalVelConstraint, profileAccelConstraint)
-                .strafeTo(new Vector2d(36, -12), translationalVelConstraint, profileAccelConstraint)
-                .strafeTo(new Vector2d(47, -12), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(36, -10), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(47, -10), translationalVelConstraint, profileAccelConstraint)
                 .strafeTo(new Vector2d(47, -48), translationalVelConstraint, profileAccelConstraint)
                 //TODO: ****** FIRST SAMPLE ******
-                .strafeTo(new Vector2d(47, -12), translationalVelConstraint, profileAccelConstraint)
-                .strafeTo(new Vector2d(55, -12), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(47, -10), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(55, -10), translationalVelConstraint, profileAccelConstraint)
                 //TODO: ***** SECOND SAMPLE *****
                 .strafeTo(new Vector2d(55, -48), translationalVelConstraint, profileAccelConstraint)
-                .strafeTo(new Vector2d(55, -12), translationalVelConstraint, profileAccelConstraint)
-                .strafeTo(new Vector2d(61, -12), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(55, -10), translationalVelConstraint, profileAccelConstraint)
+                .strafeTo(new Vector2d(61, -10), translationalVelConstraint, profileAccelConstraint)
                 //TODO: THIRD SAMPLE
                 .strafeTo(new Vector2d(61, -59), translationalVelConstraint, profileAccelConstraint)
                 .waitSeconds(.6)

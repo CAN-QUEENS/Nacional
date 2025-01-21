@@ -15,38 +15,37 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 public final class Net extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startPose = new Pose2d(-23, -61, -Math.PI/2);
+        Pose2d startPose = new Pose2d(-23, -61, Math.PI/2);
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(-47,-47))
+                //TODO ****** NET *****
                 .setTangent(0)
-                //TODO: ****** NET *****
-                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                .strafeToLinearHeading(new Vector2d(-52, -50), Math.toRadians(226))
                 .waitSeconds(1)
                 .setTangent(0)
-                // TODO: FIRST SAMPLE
-                .strafeToLinearHeading(new Vector2d(-48, -45), Math.toRadians(90))
+                // TODO FIRST SAMPLE
+                .strafeToLinearHeading(new Vector2d(-47, -39), Math.toRadians(-270))
                 .waitSeconds(.6)
                 .setTangent(0)
-                // TODO: ***** NET *****
-                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                // TODO ***** NET *****
+                .strafeToLinearHeading(new Vector2d(-52, -50), Math.toRadians(226))
                 .waitSeconds(1)
                 .setTangent(0)
-                //TODO: SECOND SAMPLE
-                .strafeToLinearHeading(new Vector2d(-58, -45), Math.toRadians(90))
+                //TODO SECOND SAMPLE
+                .strafeToLinearHeading(new Vector2d(-57, -39), Math.toRadians(-270))
                 .waitSeconds(.6)
                 .setTangent(0)
-                // TODO: ***** NET *****
-                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                // TODO ***** NET *****
+                .strafeToLinearHeading(new Vector2d(-52, -50), Math.toRadians(226))
                 .waitSeconds(1)
                 .setTangent(Math.PI * 2 )
-                //TODO: THIRD SAMPLE
+                //TODO THIRD SAMPLE
                 .strafeToLinearHeading(new Vector2d(-50, -24), Math.toRadians(180))
                 .waitSeconds(.6)
                 .setTangent(0)
-                // TODO: ***** NET *****
-                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                // TODO ***** NET *****
+                .strafeToLinearHeading(new Vector2d(-52, -50), Math.toRadians(226))
                 .waitSeconds(1)
                 .setTangent(Math.PI /3)
                 .splineToLinearHeading(new Pose2d(-39, -10, Math.PI * 2), Math.PI/2)
