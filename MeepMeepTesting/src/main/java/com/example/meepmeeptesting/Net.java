@@ -46,7 +46,7 @@ public class Net{
                 .waitSeconds(1)
                 .setTangent(Math.PI /3)
                 .splineToLinearHeading(new Pose2d(-39, -10, Math.PI * 2), Math.PI/2)
-                .strafeTo(new Vector2d(-24, -10))
+                .strafeTo(new Vector2d(-27, -10))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

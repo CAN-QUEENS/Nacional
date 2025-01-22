@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.robot.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
-@Disabled
 @TeleOp(name = "Ferreria", group = "Ferreria: ")
 public final class Ferreria extends OpMode {
     private final Intake intakeSERVO = new Intake();
