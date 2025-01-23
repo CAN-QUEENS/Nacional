@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name = "NET", group = "FERRERIA: ")
+@Autonomous(name = "NETT", group = "FERRERIA: ")
 public final class Net extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

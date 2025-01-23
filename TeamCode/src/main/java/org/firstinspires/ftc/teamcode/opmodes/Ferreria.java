@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import static org.firstinspires.ftc.teamcode.utils.Constants.Slider.*;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -14,7 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
-@TeleOp(name = "Ferreria", group = "Ferreria: ")
+@TeleOp(name = "CANQUEENS", group = "Ferreria: ")
 public final class Ferreria extends OpMode {
     private final Intake intakeSERVO = new Intake();
     private boolean isFieldCentric = false;
@@ -27,9 +25,9 @@ public final class Ferreria extends OpMode {
 
     @Override
     public void init() {
-        sliderSubsystem = new Slider(hardwareMap);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         fieldDrive = new FieldCentricDrive(hardwareMap);
+        sliderSubsystem = new Slider(hardwareMap, telemetry); // Nombre del motor
         telemetry.addLine("Initialized");
     }
 
@@ -38,23 +36,19 @@ public final class Ferreria extends OpMode {
         intakeControl();
         sliderControl();
         controlRobot();
+        sliderSubsystem.update();
+        telemetry.update();
     }
 
-    //TODO: ******* SLIDER CONTROL *******
+    // TODO: SLIDER CONTROL
     private void sliderControl() {
-
         double joystickInput = -gamepad2.left_stick_y;
-        double sliderPower = Range.clip(joystickInput, -1.0, 1.0);
-
-        /*if (Math.abs(sliderPower) > 0.1) {
-            sliderSubsystem.setSliderPower(sliderPower * 0.5);
-        } else {
-            sliderSubsystem.setSliderPower(0);
+        if (Math.abs(joystickInput) > 0.1) {
+            sliderSubsystem.setTargetFromJoystick(joystickInput);
         }
-        sliderSubsystem.updateSlider();*/
     }
 
-    //TODO: ******* INTAKE CONTROL *******
+    // TODO: INTAKE CONTROL
     private void intakeControl() {
         if (gamepad2.a) {
             intakeSERVO.pickSample();
@@ -63,7 +57,7 @@ public final class Ferreria extends OpMode {
         }
     }
 
-    //TODO: ******* CHASIS CONFIG *******
+    // TODO: CHASIS CONFIG CONTROL
     private void controlRobot() {
         if (gamepad1.x && !lastX) {
             isFieldCentric = !isFieldCentric;
@@ -80,7 +74,7 @@ public final class Ferreria extends OpMode {
         if (gamepad1.left_bumper) {
             speedFactor = 0.5;
         } else if (gamepad1.right_bumper) {
-            speedFactor = 0.7;
+            speedFactor =  1.0;
         } else {
             speedFactor = 0.8;
         }

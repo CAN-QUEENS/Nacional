@@ -11,10 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-import java.util.Arrays;
-
-@Autonomous(name = "SAMPLES-2", group = "FERRERIA: ")
-public final class Samples2 extends LinearOpMode {
+@Autonomous(name = "SAMPLES", group = "FERRERIA: ")
+public final class Samples extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {

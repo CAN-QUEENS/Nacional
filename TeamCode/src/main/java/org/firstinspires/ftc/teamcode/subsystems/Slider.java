@@ -1,137 +1,84 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.utils.Constants.Slider.*;
+
 import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.utils.PID;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Config
 public class Slider {
-    private DcMotorEx slider;
 
-    public int SliderTarget;
-    private PID sliderController;
+    private final PIDController controller;
+    private final DcMotorEx motor;
+    private final Telemetry telemetry;
+    public static int target = 0;
+    private final double ticksInDegree = 700 / 180.0;
 
-    public Slider(HardwareMap hardwareMap) {
-        slider = hardwareMap.get(DcMotorEx.class, SLIDER_NAME);
-        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        sliderController = new PID(new PID.PIDCoefficients(0.0015, 0, 0.0017));
+    /**
+     * TODO Constructor para inicializar el controlador PID.
+     *
+     * @param hardwareMap El mapa de hardware del robot.
+     * @param telemetry   La instancia de telemetría para depuración.
+     */
+    public Slider(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.controller = new PIDController(p, i, d);
+        this.telemetry = telemetry;
+        this.motor = hardwareMap.get(DcMotorEx.class, SLIDER_NAME);
+        this.telemetry.addLine("PID Controller Initialized for motor: " + SLIDER_NAME);
+        FtcDashboard.getInstance().getTelemetry().addLine("Dashboard Connected");
     }
 
-    public void setSliderTarget(int position) {
-        SliderTarget = Range.clip(position, SLIDER_MIN_POSITION, SLIDER_MAX_POSITION);
+    /**
+     *TODO Ajusta el objetivo del slider basado en la entrada del joystick.
+     *
+     * @param joystickInput Entrada del joystick (-1.0 a 1.0).
+     */
+    public void setTargetFromJoystick(double joystickInput) {
+        double joystickScaled = joystickInput * MAX_POSITION;
+        target = (int) Math.round(joystickScaled);
+        target = Math.max(MIN_POSITION, Math.min(MAX_POSITION, target));
     }
 
-    public void updateSlider() {
-        sliderController.targetPosition = Range.clip(SliderTarget, SLIDER_MIN_POSITION, SLIDER_MAX_POSITION);
-        slider.setPower(-sliderController.update(slider.getCurrentPosition()) * 0.4);
+    public int getCurrentPosition() {
+        return motor.getCurrentPosition();
     }
 
-    class SliderToPos implements Action {
-        int ticks;
+    public void update() {
+        controller.setPID(p, i, d);
+        int currentPosition = motor.getCurrentPosition();
+        double pid = controller.calculate(currentPosition, target);
+        double feedForward = Math.cos(Math.toRadians(target / ticksInDegree)) * f;
 
-        public SliderToPos(int ticks) {
-            this.ticks = ticks;
-        }
+        double power = pid + feedForward;
+        motor.setPower(power);
 
+        telemetry.addData("Motor: ", motor.getDeviceName());
+        telemetry.addData("Current Position: ", currentPosition);
+        telemetry.addData("Target: ", target);
+        telemetry.addData("Power: ", power);
+        telemetry.update();
+    }
+
+    //TODO ****** ACTION FOR SAMPLE ******
+    public class SAMPLE implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            setSliderTarget(ticks);
-            return slider.getCurrentPosition() == ticks; // Espera a que llegue a la posición deseada
+            target = SAMPLE;
+            update();
+            telemetryPacket.put("Target", SAMPLE);
+            telemetryPacket.put("Current Position", getCurrentPosition());
+            return Math.abs(getCurrentPosition() - SAMPLE) < POSITION_TOLERANCE;
         }
     }
-
-    class SliderToPosSmooth implements Action {
-        int ticks;
-        int currentTicks;
-        double timeSeconds;
-
-        ElapsedTime timer = null;
-
-        public SliderToPosSmooth(int ticks, double timeSeconds) {
-            this.ticks = ticks;
-            this.timeSeconds = timeSeconds;
-        }
-
-        private double lerp(double start, double end, double t) {
-            return start * (1 - t) + end * t;
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (timer == null) {
-                timer = new ElapsedTime();
-                currentTicks = slider.getCurrentPosition();
-            }
-            double t = Range.clip(timer.seconds() / timeSeconds, 0, 1);
-            SliderTarget = (int) lerp(currentTicks, ticks, t);
-            updateSlider();
-            return timer.seconds() <= timeSeconds;
-        }
-    }
-
-    class SliderUpdate implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            updateSlider();
-            return true;
-        }
-    }
-
-    public Action sliderUp() {
-        return new SequentialAction(
-                new ParallelAction(
-                        new SliderToPos(SLIDER_MAX_POSITION - 50)
-                )
-        );
-    }
-
-    public Action sliderDown() {
-        return new SequentialAction(
-                new ParallelAction(
-                        new SliderToPos(SLIDER_MIN_POSITION + 50)
-                )
-        );
-    }
-
-    public Action armUpdate() {
-        return new SliderUpdate();
-    }
-
-    // Las funciones sliderSample, sliderHighBascket, etc., ahora devuelven un Action de la siguiente manera:
-
-    public Action sliderSample() {
-        setSliderTarget(SAMPLE);
-        return new SliderToPos(SAMPLE); // Acción que mueve el slider a SAMPLE
-    }
-
-    public Action sliderHighBascket() {
-        setSliderTarget(HIGH_BASCKET);
-        return new SliderToPos(HIGH_BASCKET); // Acción que mueve el slider al cesto alto
-    }
-
-    public Action sliderLowBascket() {
-        setSliderTarget(LOW_BASCKET);
-        return new SliderToPos(LOW_BASCKET); // Acción que mueve el slider al cesto bajo
-    }
-
-    public Action sliderHighSpecimen() {
-        setSliderTarget(HIGH_SPECIMEN);
-        return new SliderToPos(HIGH_SPECIMEN); // Acción que mueve el slider al espécimen alto
-    }
-
-    public Action sliderLowSpecimen() {
-        setSliderTarget(LOW_SPECIMEN);
-        return new SliderToPos(LOW_SPECIMEN); // Acción que mueve el slider al espécimen bajo
+    public Action PickS() {
+        return new SAMPLE();
     }
 }

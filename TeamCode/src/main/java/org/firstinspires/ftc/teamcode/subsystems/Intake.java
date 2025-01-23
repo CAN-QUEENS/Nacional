@@ -1,70 +1,56 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.utils.Constants.Intake.*;
-
 import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    public Servo intakeSERVO;
+    public Servo intakeDER;
+    public Servo intakeIZQ; // Segundo servo
+
     public void init(HardwareMap hardwareMap) {
-        intakeSERVO = hardwareMap.get(Servo.class, INTAKE_NAME);
+        intakeDER = hardwareMap.get(Servo.class, INTAKE_NAME_DER);
+        intakeIZQ = hardwareMap.get(Servo.class, INTAKE_NAME_IZQ);
     }
-    public class OUTSAMPLE implements Action {
-        Servo intakeSERVO;
+
+    public class OUT implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intakeSERVO.setPosition(POS_OPEN);
-            return false;
-        }
-    }
-
-    public class INSAMPLE implements Action {
-        Servo claw;
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            claw.setPosition(POS_CLOSE);
-            return false;
-        }
-    }
-
-    public Action dropSample(){
-        return new OUTSAMPLE();
-    }
-
-    public Action pickSample(){
-        return new INSAMPLE();
-    }
-
-
-
-   /* class SamplePickColor implements Action {
-
-        int Color;
-        double Time;
-        ElapsedTime timer;
-
-        public SamplePickColor(int color, double time) {
-            this.Color = color;
-            this.Time = time;
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (timer == null) {
-                timer = new ElapsedTime();
-                etesito.pickSample();
-                rodeMotor.setPower(0.05);
-
+            if (intakeDER != null && intakeIZQ != null) {
+                intakeDER.setPosition(OUTPOS);
+                intakeIZQ.setPosition(OUTPOS_DER);
+                telemetryPacket.put("Servo 1 Position", "OPEN");
+                telemetryPacket.put("Servo 2 Position", "OPEN");
+            } else {
+                telemetryPacket.put("Error", "One or both servos are null");
             }
-
-            return (Color < 350 || etesito.getColorGreen() < 600) || timer.seconds() < Time;
+            return false;
         }
+    }
 
-    }*/
+    public class IN implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (intakeDER != null && intakeIZQ != null) {
+                intakeDER.setPosition(INPOS);
+                intakeIZQ.setPosition(INPOS_IZQ);
+                telemetryPacket.put("Servo 1 Position", "CLOSE");
+                telemetryPacket.put("Servo 2 Position", "CLOSE");
+            } else {
+                telemetryPacket.put("Error", "One or both servos are null");
+            }
+            return false;
+        }
+    }
+
+    public Action dropSample() {
+        return new OUT();
+    }
+
+    public Action pickSample() {
+        return new IN();
+    }
 }
