@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name = "SAMPLES", group = "FERRERIA: ")
+@Autonomous
 public final class Samples extends LinearOpMode {
 
     @Override
@@ -33,9 +33,9 @@ public final class Samples extends LinearOpMode {
                 // TODO: ***** SECOND SAMPLE *****
                 .strafeTo(new Vector2d(55, -48))
                 .strafeTo(new Vector2d(55, -12))
-                .strafeTo(new Vector2d(61, -12))
+                .strafeTo(new Vector2d(62, -12))
                 // TODO: THIRD SAMPLE
-                .strafeTo(new Vector2d(61, -48))
+                .strafeTo(new Vector2d(62, -48))
                 .setTangent(0)
                 .strafeToLinearHeading(new Vector2d(39, -51), Math.toRadians(270))
                 .waitSeconds(.8)

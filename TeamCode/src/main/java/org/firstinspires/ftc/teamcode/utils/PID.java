@@ -15,7 +15,7 @@ public class PID extends OpMode {
 
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
-    public static int Target = 0;
+    public static int target = 0;
 
     private final double ticks_in_degree = 700 / 180.0;
 
@@ -26,21 +26,20 @@ public class PID extends OpMode {
         controller = new PIDController(p, i , d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        motor = hardwareMap.get(DcMotorEx.class, "brazo");
+        motor = hardwareMap.get(DcMotorEx.class, "slider");
     }
 
     @Override
     public void loop(){
         controller.setPID(p, i, d);
         int ArmPos = motor.getCurrentPosition();
-        double pid = controller.calculate(ArmPos, Target);
-        double ff = Math.cos(Math.toRadians(Target / ticks_in_degree)) * f;
+        double pid = controller.calculate(ArmPos, target);
+        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
 
         double power = pid + ff;
         motor.setPower(power);
         telemetry.addData("pos: ", ArmPos);
-        telemetry.addData("target: ", Target);
+        telemetry.addData("target: ", target);
         telemetry.update();
     }
-
 }

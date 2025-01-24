@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+/*package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name = "NETT", group = "FERRERIA: ")
+@Autonomous
 public final class Net extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -65,7 +65,7 @@ public final class Net extends LinearOpMode {
                 )
         );
     }
-}
+}*/
 
 /*
    TODO waitSeconds(double: seconds)

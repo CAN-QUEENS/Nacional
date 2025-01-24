@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
-@TeleOp(name = "CANQUEENS", group = "Ferreria: ")
+@TeleOp(name = "FERRERIA-", group = "CANQUEENS")
 public final class Ferreria extends OpMode {
     private final Intake intakeSERVO = new Intake();
     private boolean isFieldCentric = false;
