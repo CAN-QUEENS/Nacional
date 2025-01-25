@@ -19,61 +19,68 @@ public class Slider {
     private final PIDController controller;
     private final DcMotorEx motor;
     private final Telemetry telemetry;
-    public static int target = 0;
-    private final double ticksInDegree = 700 / 180.0; // Conversión de ticks a grados.
+    public static int target = 0; // Target position in ticks
+    private final double ticksInDegree = 700 / 180.0;
+
+    public static double maxPower = 0.5; // Maximum power for the motor
+    public static double minPower = 0.1; // Minimum power to prevent stalling
+    public static double slowdownThreshold = 500; // Distance in ticks to start slowing down
 
     public Slider(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.controller = new PIDController(p, i, d); // Configuración inicial del PID
+        this.controller = new PIDController(p, i, d);
         this.telemetry = telemetry;
         this.motor = hardwareMap.get(DcMotorEx.class, SLIDER_NAME);
-        this.telemetry.addLine("PID Controller Initialized for motor: " + SLIDER_NAME);
-        FtcDashboard.getInstance().getTelemetry().addLine("Dashboard Connected");
-    }
 
-    public void setTargetFromJoystick(double joystickInput) {
-        double joystickScaled = joystickInput * MAX_POSITION;
-        target = (int) Math.round(joystickScaled);
-        target = Math.max(MIN_POSITION, Math.min(MAX_POSITION, target));
+        // Reset encoder and set initial target position
+        this.motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor.setTargetPosition(0); // Set an initial target position (e.g., home position)
+        this.motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION); // Now switch to RUN_TO_POSITION mode
+        this.motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        FtcDashboard.getInstance().getTelemetry().addLine("Dashboard Connected");
     }
 
     public int getCurrentPosition() {
         return motor.getCurrentPosition();
     }
 
-    /**
-     * Actualiza la lógica del PID y controla el motor.
-     */
     public void update() {
-        // Actualizar valores del PID
+        // Update the PID coefficients
         controller.setPID(p, i, d);
 
-        // Obtener posición actual del motor
         int currentPosition = motor.getCurrentPosition();
 
-        // Calcular el valor del PID
+        // Calculate PID and feed-forward
         double pid = controller.calculate(currentPosition, target);
-
-        // Calcular el término de feedforward (FF)
         double feedForward = Math.cos(Math.toRadians(target / ticksInDegree)) * f;
 
-        // Calcular la potencia total a aplicar
-        double power = pid + feedForward;
+        // Calculate power dynamically based on the distance to the target
+        double distance = Math.abs(target - currentPosition);
+        double scaledPower;
+        if (distance > slowdownThreshold) {
+            scaledPower = maxPower; // Full power if far from the target
+        } else {
+            scaledPower = minPower + (maxPower - minPower) * (distance / slowdownThreshold); // Linearly scale power
+        }
 
-        // Establecer la potencia en el motor
+        double power = Math.max(-scaledPower, Math.min(scaledPower, pid + feedForward)); // Limit power to the scaled value
+
+        // Ensure the motor has a valid target position
+        motor.setTargetPosition(target);
+
+        // Set motor power
         motor.setPower(power);
 
-        // Telemetría
-        telemetry.addData("Motor: ", motor.getDeviceName());
-        telemetry.addData("Current Position: ", currentPosition);
-        telemetry.addData("Target: ", target);
-        telemetry.addData("PID Output: ", pid);
-        telemetry.addData("Feedforward: ", feedForward);
-        telemetry.addData("Power: ", power);
+        // Telemetry for debugging
+        telemetry.addData("Current Position", currentPosition);
+        telemetry.addData("Target", target);
+        telemetry.addData("Power", power);
+        telemetry.addData("Distance to Target", distance);
         telemetry.update();
     }
 
-    //TODO ****** ACTION FOR UPDATE ******
-    public class UPDATE implements Action {
+    // Actions for specific targets
+    public class UpdateAction implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             update();
@@ -85,102 +92,43 @@ public class Slider {
     }
 
     public Action SliderUpdate() {
-        return new UPDATE();
+        return new UpdateAction();
     }
 
-    //TODO ****** ACTION FOR SAMPLE ******
-    public class SAMPLE implements Action {
+    public class TargetAction implements Action {
+        private final int actionTarget;
+
+        public TargetAction(int actionTarget) {
+            this.actionTarget = actionTarget;
+        }
+
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = SAMPLE;
+            // Update the target position
+            target = actionTarget;
+            motor.setTargetPosition(actionTarget);
+
+            // Perform an update
             update();
-            telemetryPacket.put("Target", SAMPLE);
+
+            // Send telemetry data
+            telemetryPacket.put("Target", actionTarget);
             telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - SAMPLE) < POSITION_TOLERANCE;
+
+            // Return true if the motor is close enough to the target
+            return Math.abs(getCurrentPosition() - actionTarget) < POSITION_TOLERANCE;
         }
     }
 
     public Action PickSAMPLE() {
-        return new SAMPLE();
+        return new TargetAction(SAMPLE);
     }
 
-    //TODO ****** ACTION FOR HUMAN-PLAYER ******
-    public class HUMAN implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = HUMAN;
-            update();
-            telemetryPacket.put("Target", HUMAN);
-            telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - HUMAN) < POSITION_TOLERANCE;
-        }
+    public Action high_CHAMBER() {
+        return new TargetAction(HIGH_CHAMBER);
     }
 
-    public Action HumanSample() {
-        return new HUMAN();
-    }
-
-    //TODO ****** ACTION FOR HIGH CHAMBER ******
-    public class HighCHAMBER implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = HIGH_SPECIMEN;
-            update();
-            telemetryPacket.put("Target", HIGH_SPECIMEN);
-            telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - HIGH_SPECIMEN) < POSITION_TOLERANCE;
-        }
-    }
-
-    public Action HIGH_CHAMBER() {
-        return new HighCHAMBER();
-    }
-
-    //TODO ****** ACTION FOR LOW CHAMBER ******
-    public class LowCHAMBER implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = LOW_SPECIMEN;
-            update();
-            telemetryPacket.put("Target", LOW_SPECIMEN);
-            telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - LOW_SPECIMEN) < POSITION_TOLERANCE;
-        }
-    }
-
-    public Action LOW_SPECIMEN() {
-        return new LowCHAMBER();
-    }
-
-    //TODO ****** ACTION FOR HIGH BASKET ******
-    public class HighBASCKET implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = HIGH_BASCKET;
-            update();
-            telemetryPacket.put("Target", HIGH_BASCKET);
-            telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - HIGH_BASCKET) < POSITION_TOLERANCE;
-        }
-    }
-
-    public Action HIGH_BASCKET() {
-        return new HighBASCKET();
-    }
-
-    //TODO ****** ACTION FOR LOW BASKET ******
-    public class LowBASCKET implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            target = LOW_BASCKET;
-            update();
-            telemetryPacket.put("Target", LOW_BASCKET);
-            telemetryPacket.put("Current Position", getCurrentPosition());
-            return Math.abs(getCurrentPosition() - LOW_BASCKET) < POSITION_TOLERANCE;
-        }
-    }
-
-    public Action LOW_BASCKET() {
-        return new LowBASCKET();
+    public Action Medium(){
+        return new TargetAction(MEDIUM);
     }
 }

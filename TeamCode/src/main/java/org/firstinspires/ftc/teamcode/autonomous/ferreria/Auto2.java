@@ -14,35 +14,56 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
-@Autonomous
+@Autonomous(name = "CustomAuto2", group = "Competition")
 public final class Auto2 extends LinearOpMode {
-
     private Intake intakeSystem;
+    private Slider sliderSystem;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Inicializa la pose y subsistemas
         Pose2d startPose = new Pose2d(-23, -61, Math.PI / 2);
+
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
+        sliderSystem = new Slider(hardwareMap, telemetry);
         intakeSystem = new Intake();
         intakeSystem.init(hardwareMap);
 
-        // Define la trayectoria
-        Action auto = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(-23, -50)) // Trajectory hasta la posición deseada
-                .build();
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(-23, -50));
 
-        // Define las acciones y la secuencia
+        Action tab2 = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(-23, -40)).build();
+
+        SequentialAction actionSequence = new SequentialAction(
+                intakeSystem.pickSample(),
+                new SleepAction(0.5),
+                new ParallelAction(
+                        intakeSystem.IN_intake(),
+                        new SleepAction(1.5),
+                        tab2
+                ) ,
+                new SleepAction(1.5),
+                intakeSystem.STOP_intake(),
+                new SleepAction(1.5),
+                intakeSystem.dropSample(),
+                new SleepAction(1.5),
+                sliderSystem.high_CHAMBER(),
+                new SleepAction(2)
+        );
+
         waitForStart();
 
-        Actions.runBlocking(new SequentialAction(
-                intakeSystem.pickSample(), // Extiende (pick)
-                new SleepAction(3),        // Espera 3 segundos
-                intakeSystem.dropSample()  // Retracta (drop)
+        if (isStopRequested()) return;
+
+        Actions.runBlocking(new ParallelAction(
+                tab1.build(),
+                actionSequence,
+                sliderSystem.SliderUpdate()
         ));
 
-        telemetry.addLine("FINISH");
+        telemetry.addLine("Autonomous Complete!");
         telemetry.update();
     }
 }
