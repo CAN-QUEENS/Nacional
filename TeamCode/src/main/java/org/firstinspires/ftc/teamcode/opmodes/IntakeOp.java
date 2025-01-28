@@ -93,9 +93,7 @@ public class IntakeOp extends LinearOpMode {
 
             if(gamepad2.a){
                 sliderSystem.high_CHAMBER().run(packet);
-            }else if(gamepad2.x){
-                sliderSystem.Medium().run(packet);
-            }else{
+            } else{
                 sliderSystem.PickSAMPLE().run(packet);
             }
 

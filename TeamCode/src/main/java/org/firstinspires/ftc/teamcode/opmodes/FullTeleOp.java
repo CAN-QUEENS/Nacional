@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.FieldCentricDrive;
+@Disabled
 @TeleOp
 public final class FullTeleOp extends LinearOpMode {
 

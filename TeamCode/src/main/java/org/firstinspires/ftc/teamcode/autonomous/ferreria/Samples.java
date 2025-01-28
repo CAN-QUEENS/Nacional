@@ -20,52 +20,46 @@ public final class Samples extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
-                // TODO: FIRST ESPECIMEN
+                //TODO: FIRST ESPECIMEN
                 .strafeTo(new Vector2d(0,-37))
-                .waitSeconds(.8)
-                .strafeTo(new Vector2d(36, -37))
+                .waitSeconds(1)
+                .setTangent(0)
+                .strafeToLinearHeading(new Vector2d(36, -37), Math.toRadians(-270))
                 .strafeTo(new Vector2d(36, -12))
                 .strafeTo(new Vector2d(47, -12))
                 .strafeTo(new Vector2d(47, -48))
-                // TODO: ****** FIRST SAMPLE ******
+                //TODO: ****** FIRST SAMPLE ******
                 .strafeTo(new Vector2d(47, -12))
                 .strafeTo(new Vector2d(55, -12))
-                // TODO: ***** SECOND SAMPLE *****
+                //TODO: ***** SECOND SAMPLE *****
                 .strafeTo(new Vector2d(55, -48))
                 .strafeTo(new Vector2d(55, -12))
-                .strafeTo(new Vector2d(62, -12))
-                // TODO: THIRD SAMPLE
-                .strafeTo(new Vector2d(62, -48))
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(39, -51), Math.toRadians(270))
-                .waitSeconds(.8)
-                // TODO: SECOND ESPECIMEN
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(-270))
-                .waitSeconds(.8)
-                // TODO: OBSERVATION ZONE
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(39, -51), Math.toRadians(270))
-                .waitSeconds(.8)
-                // TODO: THIRD ESPECIMEN
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(-270))
-                .waitSeconds(.8)
-                // TODO: OBSERVATION ZONE
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(39, -51), Math.toRadians(270))
-                .waitSeconds(.8)
-                // TODO: FOURTH ESPECIMEN
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(-270))
-                .waitSeconds(.8)
-                // TODO: OBSERVATION ZONE
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(39, -51), Math.toRadians(270))
-                .waitSeconds(.8)
-                // TODO: FIFTH SPECIMEN
-                .setTangent(0)
-                .strafeToLinearHeading(new Vector2d(0, -37), Math.toRadians(-270));
+                .strafeTo(new Vector2d(61, -12))
+                //TODO: THIRD SAMPLE
+                .strafeTo(new Vector2d(61, -59))
+                .waitSeconds(.6)
+                //TODO: SECOND ESPECIMEN
+                .strafeTo(new Vector2d(0, -37))
+                .strafeTo(new Vector2d(0,-37))
+                .waitSeconds(1)
+                //TODO: OBSERVATION ZONE
+                .strafeTo(new Vector2d(40, -59))
+                .waitSeconds(1)
+                //TODO: THIRD ESPECIMEN
+                .strafeTo(new Vector2d(0, -37))
+                .strafeTo(new Vector2d(0,-37))
+                .waitSeconds(1)
+                //TODO: OBSERVATION ZONE
+                .strafeTo(new Vector2d(40, -59))
+                .waitSeconds(1)
+                //TODO: FOURTH ESPECIMEN
+                .strafeTo(new Vector2d(0, -37))
+                .strafeTo(new Vector2d(0,-37))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(36, -55))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(0, -37))
+                .strafeTo(new Vector2d(0,-37));
 
         waitForStart();
 

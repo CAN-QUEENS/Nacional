@@ -28,7 +28,7 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             intakeDER.setPosition(OUTPOS);
-            intakeIZQ.setPosition(OUTPOS_DER);
+            intakeIZQ.setPosition(OUTPOS_IZQ);
             return false;
         }
     }

@@ -1,4 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
@@ -23,65 +23,45 @@ public final class Complete extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startPose = new Pose2d(-23, -61, Math.PI / 2);
+        Pose2d startPose = new Pose2d(23, -62, Math.PI / 2);
 
-        // Inicialización de sistemas
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         sliderSystem = new Slider(hardwareMap, telemetry);
         intakeSystem = new Intake();
         intakeSystem.init(hardwareMap);
 
-        // Trayectoria opcional
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(-23, -51));  // Movimiento hacia adelante como ejemplo
+        TrajectoryActionBuilder moveToFirstTarget = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(0, -37));
 
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(-23, -55));  // Movimiento hacia adelante como ejemplo
+        TrajectoryActionBuilder moveToSecondTarget = drive.actionBuilder(new Pose2d(0, -37, Math.PI / 2))
+                .strafeTo(new Vector2d(0, -47));
 
-        // Crear la secuencia de acciones para realizar mientras avanza
+        TrajectoryActionBuilder moveBack = drive.actionBuilder(new Pose2d(0, -47, Math.PI / 2))
+                .strafeTo(new Vector2d(23, -62));
+
         SequentialAction actionSequence = new SequentialAction(
-                intakeSystem.pickSample(),
-                new SleepAction(0.5)
-        );
-
-        SequentialAction actionSequence3 = new SequentialAction(
-                new SleepAction(1.5),
-                intakeSystem.STOP_intake(),
-                new SleepAction(1),
-                intakeSystem.dropSample(),
-                new SleepAction(1.5),
+                new SleepAction(0.5),
+                moveToFirstTarget.build(),
+                new SleepAction(0.5),
                 sliderSystem.high_CHAMBER(),
-                new SleepAction(2),
-                intakeSystem.OUT_intake(),
-                new SleepAction(1.5),
-                sliderSystem.PickSAMPLE()
-        );
-
-
-        // Crear una nueva acción paralela que incluya la secuencia de comandos y la trayectoria
-        Action actionSequence2 = new ParallelAction(
+                new SleepAction(0.5),
                 intakeSystem.IN_intake(),
-                new SleepAction(1.5),  // El tiempo en el que el robot seguirá avanzando
-                tab2.build()  // La trayectoria para mover el robot hacia adelante
+                new ParallelAction(
+                        moveToSecondTarget.build(),
+                        new SleepAction(1.5)
+                ),
+                intakeSystem.STOP_intake()
         );
-
 
         waitForStart();
 
         if (isStopRequested()) return;
-
-        TelemetryPacket packet = new TelemetryPacket();
-
-        // Ejecutar la secuencia de acciones paralelas junto con la trayectoria
         Actions.runBlocking(new ParallelAction(
-                tab1.build(),  // Trayectoria original
-                actionSequence,  // Secuencia de acciones
-                actionSequence2,  // Secuencia de acciones
-                actionSequence3,  // Nueva acción paralela
+                actionSequence,
                 sliderSystem.SliderUpdate()
         ));
 
         telemetry.addLine("Autonomous Complete!");
         telemetry.update();
     }
-}*/
+}

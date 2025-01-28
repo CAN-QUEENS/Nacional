@@ -15,7 +15,7 @@ public class Samples{
                 .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 18)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, -62, Math.PI/2))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(23, -62, Math.PI/2))
                 //TODO: FIRST ESPECIMEN
                 .strafeTo(new Vector2d(0,-37))
                 .waitSeconds(1)

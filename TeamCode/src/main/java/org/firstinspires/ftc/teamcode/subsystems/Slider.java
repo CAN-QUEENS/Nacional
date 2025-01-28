@@ -127,8 +127,4 @@ public class Slider {
     public Action high_CHAMBER() {
         return new TargetAction(HIGH_CHAMBER);
     }
-
-    public Action Medium(){
-        return new TargetAction(MEDIUM);
-    }
 }
