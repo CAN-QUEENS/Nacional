@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -16,47 +15,49 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
-@Autonomous(name = "Complete", group = "Competition")
-public final class Complete extends LinearOpMode {
+@Autonomous
+public final class PICK_SAMPLE extends LinearOpMode {
     private Intake intakeSystem;
     private Slider sliderSystem;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startPose = new Pose2d(23, -62, Math.PI / 2);
+        Pose2d startPose = new Pose2d(-23, -61, Math.PI / 2);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         sliderSystem = new Slider(hardwareMap, telemetry);
         intakeSystem = new Intake();
         intakeSystem.init(hardwareMap);
 
-        TrajectoryActionBuilder moveToFirstTarget = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(0, -37));
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(-23, -50));
 
-        TrajectoryActionBuilder moveToSecondTarget = drive.actionBuilder(new Pose2d(0, -37, Math.PI / 2))
-                .strafeTo(new Vector2d(0, -47));
-
-        TrajectoryActionBuilder moveBack = drive.actionBuilder(new Pose2d(0, -47, Math.PI / 2))
-                .strafeTo(new Vector2d(23, -62));
+        Action tab2 = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(-23, -40)).build();
 
         SequentialAction actionSequence = new SequentialAction(
+                intakeSystem.pickSample(),
                 new SleepAction(0.5),
-                moveToFirstTarget.build(),
-                new SleepAction(0.5),
-                sliderSystem.high_CHAMBER(),
-                new SleepAction(0.5),
-                intakeSystem.IN_intake(),
                 new ParallelAction(
-                        moveToSecondTarget.build(),
-                        new SleepAction(1.5)
-                ),
-                intakeSystem.STOP_intake()
+                        intakeSystem.IN_intake(),
+                        new SleepAction(1.5),
+                        tab2
+                ) ,
+                new SleepAction(1.5),
+                intakeSystem.STOP_intake(),
+                new SleepAction(1.5),
+                intakeSystem.dropSample(),
+                new SleepAction(1.5),
+                sliderSystem.high_CHAMBER(),
+                new SleepAction(2)
         );
 
         waitForStart();
 
         if (isStopRequested()) return;
+
         Actions.runBlocking(new ParallelAction(
+                tab1.build(),
                 actionSequence,
                 sliderSystem.SliderUpdate()
         ));

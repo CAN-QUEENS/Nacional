@@ -19,6 +19,9 @@ public class Constants {
         public static double f = 0.1;
         public static final int POSITION_TOLERANCE = 10;
         public static int SAMPLE = 0;
+
+        public static int NO_FLOOR = 1000;
+        public static int MEDIUM = 1500;
         public static int HIGH_CHAMBER = 1800;
     }
 }

@@ -15,23 +15,21 @@ public class Colect_Net{
                 .setConstraints(80, 80, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-16, -62, Math.PI/2 ))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-23, -62, Math.PI/2 ))
                 .setTangent(Math.PI / 2)
                 .splineToConstantHeading(new Vector2d(-36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(-37, -10))
                 .strafeTo(new Vector2d(-47, -10))
                 .strafeTo(new Vector2d(-47, -57))
-                .turn(-Math.PI/2)
                 .strafeTo(new Vector2d(-47, -10))
-                .turn(Math.PI/2)
                 .strafeTo(new Vector2d(-55, -10))
                 .strafeTo(new Vector2d(-55, -53))
                 .strafeTo(new Vector2d(-55, -10))
-                .strafeTo(new Vector2d(-61, -10))
-                .strafeTo(new Vector2d(-61, -53))
+                .strafeTo(new Vector2d(-63, -10))
+                .strafeTo(new Vector2d(-63, -53))
                 .setTangent(Math.PI /3)
                 .splineToLinearHeading(new Pose2d(-39, -10, Math.PI * 2), Math.PI/2)
-                .strafeTo(new Vector2d(-24, -10))
+                .strafeTo(new Vector2d(-25, -10))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

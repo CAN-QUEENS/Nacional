@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+package org.firstinspires.ftc.teamcode.autonomous.ferreria.disabled;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -7,10 +7,12 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
+@Disabled
 @Autonomous
 public final class Net extends LinearOpMode {
     @Override
