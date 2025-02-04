@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -33,22 +34,24 @@ public final class ESPECIMEN_SAMPLES extends LinearOpMode {
                 .afterTime(0, sliderSystem.Medium())
                 .strafeTo(new Vector2d(0, -46))
                 .strafeToConstantHeading(new Vector2d(0,-30),new TranslationalVelConstraint(20),new ProfileAccelConstraint(-10,10))
-                .afterTime(0, sliderSystem.high_CHAMBER())
-                .afterTime(0, new ParallelAction(
-                        intakeSystem.IN_intake()
+                .afterTime(0, new SequentialAction(
+                        sliderSystem.high_CHAMBER()
                 ))
-                .waitSeconds(1)
+                .afterTime(.7, intakeSystem.OUT_intake())
                 .strafeToConstantHeading(new Vector2d(0,-46),new TranslationalVelConstraint(20),new ProfileAccelConstraint(-10,10))
-                .afterTime(0, intakeSystem.STOP_intake())
+                .afterTime(1, new SequentialAction(
+                        intakeSystem.STOP_intake(),
+                        sliderSystem.NoFloor()
+                ))
                 .strafeTo(new Vector2d(23, -50))
                 .afterTime(1.5, new SequentialAction(
+                        sliderSystem.PickSAMPLE()
+                ))
+                .strafeTo(new Vector2d(23, -62))
+                .afterTime(0, new ParallelAction(
                         sliderSystem.NoFloor(),
-                        intakeSystem.STOP_intake(),
                         intakeSystem.dropSample()
                 ))
-                .waitSeconds(2)
-                .build();
-        Action samples = drive.actionBuilder(startPose)
                 .setTangent(Math.PI / 2)
                 .splineToConstantHeading(new Vector2d(36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(37, -10))
@@ -58,15 +61,21 @@ public final class ESPECIMEN_SAMPLES extends LinearOpMode {
                 .strafeTo(new Vector2d(55, -10))
                 .strafeTo(new Vector2d(55, -53))
                 .strafeTo(new Vector2d(55, -10))
-                .strafeTo(new Vector2d(61, -10))
-                .strafeTo(new Vector2d(61, -53))
+                .strafeTo(new Vector2d(65, -10))
+                .strafeTo(new Vector2d(65, -53))
                 .build();
+
+       /* TrajectoryActionBuilder traj = drive.actionBuilder(startPose)
+                .strafeTo(new Vector2d(0,0));
+
+        TrajectoryActionBuilder traj2 = traj.endTrajectory().fresh()
+                        .strafeTo(new Vector2d(0,0 ));*/
 
         waitForStart();
 
         Actions.runBlocking(new ParallelAction(
+               // traj2.build(),
                 especimen,
-                samples,
                 sliderSystem.SliderUpdate()
         ));
 

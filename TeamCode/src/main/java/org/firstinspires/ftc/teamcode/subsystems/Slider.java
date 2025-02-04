@@ -120,9 +120,7 @@ public class Slider {
         }
     }
 
-    public Action PickSAMPLE() {
-        return new TargetAction(SAMPLE);
-    }
+    public Action PickSAMPLE() {return new TargetAction(SAMPLE);}
 
     public Action NoFloor() {
         return new TargetAction(NO_FLOOR);
@@ -131,7 +129,6 @@ public class Slider {
     public Action Medium() {
         return new TargetAction(MEDIUM);
     }
-
 
     public Action high_CHAMBER() {
         return new TargetAction(HIGH_CHAMBER);

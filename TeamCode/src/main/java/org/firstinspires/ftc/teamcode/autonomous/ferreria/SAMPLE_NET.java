@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
 @Autonomous
-public final class PICK_SAMPLE extends LinearOpMode {
+public final class SAMPLE_NET extends LinearOpMode {
     private Intake intakeSystem;
     private Slider sliderSystem;
 

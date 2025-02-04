@@ -34,6 +34,7 @@ public class IntakeOp extends OpMode {
         sliderSystem = new Slider(hardwareMap, telemetry);
         rotor = hardwareMap.get(Servo.class, "rotor");
 
+        sliderSystem.PickSAMPLE();
         intakeSystem = new Intake();
         intakeSystem.init(hardwareMap);
 

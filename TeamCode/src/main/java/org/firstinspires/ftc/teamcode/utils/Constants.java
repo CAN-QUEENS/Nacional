@@ -20,8 +20,12 @@ public class Constants {
         public static final int POSITION_TOLERANCE = 10;
         public static int SAMPLE = 0;
 
-        public static int NO_FLOOR = 1000;
+        public static int NO_FLOOR = 800;
         public static int MEDIUM = 1500;
         public static int HIGH_CHAMBER = 1800;
+    }
+
+    public static class Sensor_color {
+        public static String SLIDER_NAME = "sensor";
     }
 }

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
 @Autonomous
-public final class PICK_SAMPLE extends LinearOpMode {
+public final class TEST extends LinearOpMode {
     private Intake intakeSystem;
     private Slider sliderSystem;
 
@@ -31,9 +31,6 @@ public final class PICK_SAMPLE extends LinearOpMode {
         intakeSystem = new Intake();
         intakeSystem.init(hardwareMap);
 
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(startPose)
-                .strafeToConstantHeading(new Vector2d(-23,-50),new TranslationalVelConstraint(20),new ProfileAccelConstraint(-10,10));
-
         Action tab2 = drive.actionBuilder(startPose)
                 .strafeToConstantHeading(new Vector2d(-23,-40),new TranslationalVelConstraint(20),new ProfileAccelConstraint(-10,10)).build();
 
@@ -44,8 +41,8 @@ public final class PICK_SAMPLE extends LinearOpMode {
                 new SleepAction(1),
                 new ParallelAction(
                         intakeSystem.IN_intake(),
-                        new SleepAction(2)
-                        //tab2
+                        new SleepAction(2),
+                        tab2
                 ) ,
                 new SleepAction(1.5),
                 intakeSystem.STOP_intake(),
@@ -59,7 +56,6 @@ public final class PICK_SAMPLE extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(new ParallelAction(
-                tab1.build(),
                 actionSequence,
                 sliderSystem.SliderUpdate()
         ));

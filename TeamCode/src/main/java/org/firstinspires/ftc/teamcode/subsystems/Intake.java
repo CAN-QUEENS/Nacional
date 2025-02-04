@@ -4,11 +4,13 @@ import static org.firstinspires.ftc.teamcode.utils.Constants.Intake.*;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 public class Intake {
     private Servo intakeDER;
     private Servo intakeIZQ;
