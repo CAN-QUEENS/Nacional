@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -31,7 +33,7 @@ public final class HUMAN_SAMPLES extends LinearOpMode {
                 .strafeTo(new Vector2d(37, -10))
                 .strafeTo(new Vector2d(47, -10))
                 .strafeTo(new Vector2d(47, -53))
-                .strafeTo(new Vector2d(47, -10))
+                .strafeToConstantHeading(new Vector2d(47,-10),new TranslationalVelConstraint(80),new ProfileAccelConstraint(-10,10))
                 .strafeTo(new Vector2d(55, -10))
                 .strafeTo(new Vector2d(55, -53))
                 .strafeTo(new Vector2d(55, -10))
