@@ -26,11 +26,27 @@ public class Colect_Human {
                 .splineToConstantHeading(new Vector2d(36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(37, -10))
                 .strafeTo(new Vector2d(47, -10))
-                .strafeTo(new Vector2d(47, -53))
-                .strafeTo(new Vector2d(47, -10))
+                .strafeToConstantHeading(
+                        new Vector2d(47, -53),
+                        new TranslationalVelConstraint(100),
+                        new ProfileAccelConstraint(-100, 100)
+                )
+                .strafeToConstantHeading(
+                        new Vector2d(47, -10),
+                        new TranslationalVelConstraint(150),
+                        new ProfileAccelConstraint(-150, 150)
+                )
                 .strafeTo(new Vector2d(55, -10))
-                .strafeTo(new Vector2d(55, -53))
-                .strafeTo(new Vector2d(55, -10))
+                .strafeToConstantHeading(
+                        new Vector2d(55, -53),
+                        new TranslationalVelConstraint(100),
+                        new ProfileAccelConstraint(-100, 100)
+                )
+                .strafeToConstantHeading(
+                        new Vector2d(55, -10),
+                        new TranslationalVelConstraint(150),
+                        new ProfileAccelConstraint(-150, 150)
+                )
                 .strafeTo(new Vector2d(61, -10))
                 .strafeTo(new Vector2d(61, -53))
                 .build());

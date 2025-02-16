@@ -32,7 +32,7 @@ public final class HUMAN_SAMPLES extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(36, -28), Math.PI / 2)
                 .strafeTo(new Vector2d(37, -10))
                 .strafeTo(new Vector2d(47, -10))
-                .strafeTo(new Vector2d(47, -53))
+                .strafeToConstantHeading(new Vector2d(47,-53),new TranslationalVelConstraint(80),new ProfileAccelConstraint(-10,10))
                 .strafeToConstantHeading(new Vector2d(47,-10),new TranslationalVelConstraint(80),new ProfileAccelConstraint(-10,10))
                 .strafeTo(new Vector2d(55, -10))
                 .strafeTo(new Vector2d(55, -53))
