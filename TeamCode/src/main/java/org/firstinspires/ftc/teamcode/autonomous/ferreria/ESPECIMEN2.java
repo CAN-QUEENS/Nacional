@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+/*package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -10,12 +10,13 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Slider;
-
+import org.firstinspires.ftc.teamcode.subsystems.config.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.config.Slider;
+@Disabled
 @Autonomous
 public final class ESPECIMEN2 extends LinearOpMode {
     private Intake intakeSystem;
@@ -67,4 +68,4 @@ public final class ESPECIMEN2 extends LinearOpMode {
         telemetry.addLine("Autonomous Complete!");
         telemetry.update();
     }
-}
+}*/

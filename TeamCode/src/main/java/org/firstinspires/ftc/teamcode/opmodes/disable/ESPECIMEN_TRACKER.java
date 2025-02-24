@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.disable;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.utils.PIDConstants;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
@@ -26,11 +27,11 @@ import java.util.List;
 @Disabled
 @Config
 @TeleOp
-public class TRACKER extends LinearOpMode {
+public class ESPECIMEN_TRACKER extends LinearOpMode {
     double integralSum = 0;
-    double Kp = 2;
-    double Ki = 0;
-    double Kd = 0;
+    double Kp = PIDConstants.Kp;
+    double Ki = PIDConstants.Ki;
+    double Kd = PIDConstants.Kd;
     MecanumDrive drivetrain;
     ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
@@ -118,7 +119,6 @@ public class TRACKER extends LinearOpMode {
 
             Scalar lowerYellow = new Scalar(100, 100, 100);
             Scalar upperYellow = new Scalar(180, 255, 255);
-
 
             Mat yellowMask = new Mat();
             Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);

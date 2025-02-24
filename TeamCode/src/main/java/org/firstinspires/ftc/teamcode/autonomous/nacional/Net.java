@@ -1,4 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+package org.firstinspires.ftc.teamcode.autonomous.nacional;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -6,26 +6,23 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.config.Barras;
 import org.firstinspires.ftc.teamcode.subsystems.config.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.config.Slider;
 
-@Disabled
 @Autonomous(name = "NET")
-public final class NET_SAMPLES extends LinearOpMode {
-    private Intake intakeSystem;
+public final class Net extends LinearOpMode {
     private Slider sliderSystem;
+    private Barras barras;
 
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d startPose = new Pose2d(-23, -62, Math.PI / 2);
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
-        sliderSystem = new Slider(hardwareMap, telemetry);
-        intakeSystem = new Intake();
-        intakeSystem.init(hardwareMap);
+        sliderSystem = new Slider(hardwareMap);
+        barras = new Barras(hardwareMap, telemetry);
 
         Action net = drive.actionBuilder(startPose)
                 .setTangent(Math.PI / 2)
@@ -42,19 +39,18 @@ public final class NET_SAMPLES extends LinearOpMode {
                 .setTangent(Math.PI /3)
                 .splineToLinearHeading(new Pose2d(-39, -10, Math.PI * 2), Math.PI/2)
                 .strafeTo(new Vector2d(-25, -10))
-                .afterTime(0, sliderSystem.PickSAMPLE())
                 .waitSeconds(3)
                 .build();
 
         waitForStart();
 
         Actions.runBlocking(new ParallelAction(
-                net,
-                intakeSystem.dropSample(),
-                sliderSystem.NoFloor()
+                barras.HUMAN(),
+                sliderSystem.IN(),
+                net
         ));
 
         telemetry.addLine("Autonomous Complete!");
         telemetry.update();
     }
-}*/
+}

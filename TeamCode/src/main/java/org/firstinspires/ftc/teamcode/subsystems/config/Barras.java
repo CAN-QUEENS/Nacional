@@ -1,37 +1,37 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.config;
 
+import static org.firstinspires.ftc.teamcode.utils.Constants.Barras.BARRAS_NAME;
+import static org.firstinspires.ftc.teamcode.utils.Constants.Barras.ESPECIMEN;
+import static org.firstinspires.ftc.teamcode.utils.Constants.Barras.HUMAN;
+import static org.firstinspires.ftc.teamcode.utils.Constants.Barras.PUT_ESPECIMEN;
 import static org.firstinspires.ftc.teamcode.utils.Constants.Slider.*;
-
 import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Disabled
 @Config
-public class Slider {
+public class Barras {
+
     private final PIDController controller;
     private final DcMotorEx motor;
     private final Telemetry telemetry;
     public static int target = 0; // Target position in ticks
     private final double ticksInDegree = 700 / 180.0;
 
-    public static double maxPower = 0.5; // Maximum power for the motor
+    public static double maxPower = 0.8; // Maximum power for the motor
     public static double minPower = 0.1; // Minimum power to prevent stalling
     public static double slowdownThreshold = 500; // Distance in ticks to start slowing down
 
-    public Slider(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Barras(HardwareMap hardwareMap, Telemetry telemetry) {
         this.controller = new PIDController(p, i, d);
         this.telemetry = telemetry;
-        this.motor = hardwareMap.get(DcMotorEx.class, SLIDER_NAME);
+        this.motor = hardwareMap.get(DcMotorEx.class, BARRAS_NAME);
 
         // Reset encoder and set initial target position
         this.motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -122,17 +122,16 @@ public class Slider {
         }
     }
 
-    public Action PickSAMPLE() {return new TargetAction(SAMPLE);}
 
-    public Action NoFloor() {
-        return new TargetAction(NO_FLOOR);
+    public Action HUMAN() {
+        return new TargetAction(HUMAN);
     }
 
-    public Action Medium() {
-        return new TargetAction(MEDIUM);
+    public Action ESPECIMEN() {
+        return new TargetAction(ESPECIMEN);
     }
 
-    public Action high_CHAMBER() {
-        return new TargetAction(HIGH_CHAMBER);
+    public Action PUT_ESPECIMEN() {
+        return new TargetAction(PUT_ESPECIMEN);
     }
 }

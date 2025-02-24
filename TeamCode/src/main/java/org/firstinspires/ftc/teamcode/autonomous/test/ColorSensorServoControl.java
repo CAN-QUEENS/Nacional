@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Disabled
 @Autonomous(name="Color Sensor Servo Control", group="Autonomous")
 public class ColorSensorServoControl extends OpMode {
     private ColorSensor colorSensor;

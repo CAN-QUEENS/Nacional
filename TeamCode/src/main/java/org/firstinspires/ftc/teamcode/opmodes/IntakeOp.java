@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+/*package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.robot.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slider;
 
+@Disabled
 @TeleOp(name = "FERRERIA")
 public class IntakeOp extends OpMode {
 
@@ -105,4 +107,4 @@ public class IntakeOp extends OpMode {
         sliderSystem.update();
         telemetry.update();
     }
-}
+}*/

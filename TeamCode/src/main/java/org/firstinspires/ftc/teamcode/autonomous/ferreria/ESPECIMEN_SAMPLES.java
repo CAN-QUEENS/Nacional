@@ -1,21 +1,22 @@
-package org.firstinspires.ftc.teamcode.autonomous.ferreria;
+/*package org.firstinspires.ftc.teamcode.autonomous.ferreria;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Slider;
+import org.firstinspires.ftc.teamcode.subsystems.config.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.config.Slider;
 
+@Disabled
 @Autonomous
 public final class ESPECIMEN_SAMPLES extends LinearOpMode {
     private Intake intakeSystem;
@@ -65,12 +66,6 @@ public final class ESPECIMEN_SAMPLES extends LinearOpMode {
                 .strafeTo(new Vector2d(65, -53))
                 .build();
 
-       /* TrajectoryActionBuilder traj = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(0,0));
-
-        TrajectoryActionBuilder traj2 = traj.endTrajectory().fresh()
-                        .strafeTo(new Vector2d(0,0 ));*/
-
         waitForStart();
 
         Actions.runBlocking(new ParallelAction(
@@ -82,4 +77,4 @@ public final class ESPECIMEN_SAMPLES extends LinearOpMode {
         telemetry.addLine("Autonomous Complete!");
         telemetry.update();
     }
-}
+}*/
